@@ -9,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -44,6 +46,28 @@ public class Sample7Task {
 //        tick  "Option 3"
 //        click result
 //        check that text 'You selected value(s): Option 2, Option 3' is being displayed
+
+        List<WebElement> checkBoxes = driver.findElements(By.cssSelector(".w3-check[type='checkbox']"));
+
+        for (WebElement checkBox : checkBoxes) {
+            assertFalse(checkBox.isSelected()); // checkboxes are NOT selected
+        }
+        WebElement option1 = driver.findElement(By.cssSelector(".w3-check[value='Option 1'][type='checkbox']"));
+        WebElement option2 = driver.findElement(By.cssSelector(".w3-check[value='Option 2'][type='checkbox']"));
+        WebElement option3 = driver.findElement(By.cssSelector(".w3-check[value='Option 3'][type='checkbox']"));
+        WebElement resultButton = driver.findElement(By.id("result_button_checkbox"));
+
+        assertFalse(option2.isSelected());
+        option2.click();
+
+        assertTrue(option2.isSelected());
+        assertFalse(option1.isSelected());
+        assertFalse(option3.isSelected());
+
+        option3.click();
+        assertTrue(option3.isSelected());
+        resultButton.click();
+        assertEquals("You selected value(s): Option 2, Option 3", driver.findElement(By.id("result_checkbox")).getText());
     }
 
 
@@ -57,6 +81,35 @@ public class Sample7Task {
 //        check that "Option 2" and "Option 3' are not select, but "Option 1" is selected
 //        click result
 //        check that 'You selected option: Option 1' text is being displayed
+
+        List<WebElement> radioButtons = driver.findElements(By.cssSelector(".w3-check[type='radio']"));
+
+        for (WebElement radioButton : radioButtons) {
+            assertFalse(radioButton.isSelected()); // radio are NOT selected
+        }
+
+        WebElement option1 = driver.findElement(By.cssSelector(".w3-check[value='Option 1'][type='radio'"));
+        WebElement option2 = driver.findElement(By.cssSelector(".w3-check[value='Option 2'][type='radio']"));
+        WebElement option3 = driver.findElement(By.cssSelector(".w3-check[value='Option 3'][type='radio']"));
+        WebElement resultButton = driver.findElement(By.id("result_button_ratio"));
+
+        assertFalse(option3.isSelected());
+        option3.click();
+
+        assertTrue(option3.isSelected());
+        assertFalse(option1.isSelected());
+        assertFalse(option2.isSelected());
+
+        option1.click();
+        assertTrue(option1.isSelected());
+        assertFalse(option2.isSelected());
+        assertFalse(option3.isSelected());
+
+        resultButton.click();
+        assertEquals("You selected option: Option 1", driver.findElement(By.id("result_radio")).getText());
+
+
+
     }
 
     @Test
@@ -67,6 +120,20 @@ public class Sample7Task {
 //        check that selected option is "Option 2"
 //        click result
 //        check that 'You selected option: Option 2' text is being displayed
+
+
+        Select dropdown = new Select(driver.findElement(By.id("vfb-12")));
+        assertEquals("Choose your option", dropdown.getFirstSelectedOption().getText());
+        dropdown.selectByIndex(3);
+        assertEquals("Option 3", dropdown.getFirstSelectedOption().getText());
+        dropdown.selectByIndex(2);
+        assertEquals("Option 2", dropdown.getFirstSelectedOption().getText());
+
+        WebElement resultButton = driver.findElement(By.id("result_button_select"));
+        resultButton.click();
+        assertEquals("You selected option: Option 2", driver.findElement(By.id("result_select")).getText());
+
+
     }
 
     @Test
@@ -74,6 +141,27 @@ public class Sample7Task {
 //         TODO:
 //        enter date '4 of July 2007' using calendar widget
 //        check that correct date is added
+
+        Calendar cal = Calendar.getInstance();
+//    go back 10 month
+        cal.add(Calendar.MONTH, -159);
+        String result = new SimpleDateFormat("MM/04/yyyy").format(cal.getTime());
+
+        WebElement dateBox = driver.findElement(By.id("vfb-8"));
+        assertEquals("", dateBox.getAttribute("value"));
+
+        dateBox.click();
+        WebElement dateWidget = driver.findElement(By.id("ui-datepicker-div"));
+//    go back 3 month in calendar on page
+        for (int i = 0; i < 159; i++) {
+            dateWidget.findElement(By.className("ui-datepicker-prev")).click();
+        }
+//    select date 15
+        dateWidget.findElement(By.xpath("//a[text()='4']")).click();
+
+        assertEquals(result, dateBox.getAttribute("value"));
+        System.out.println(dateBox.getAttribute("value"));
+        dateBox.clear();
     }
 
     @Test
