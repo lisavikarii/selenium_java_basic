@@ -6,8 +6,15 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.concurrent.TimeUnit;
+
+//import selenium.pages.NumberSamplePage;
+//import selenium.pages.NumberSubmittedSamplePage;
+
 public class Task1 {
     WebDriver driver;
+    //static NumberSamplePage numberPage;
+    //static NumberSubmittedSamplePage numberSubmittedPage;
 
     @Before
     public void openPage() {
@@ -15,7 +22,10 @@ public class Task1 {
         String libWithDriversLocation = System.getProperty("user.dir") + "\\lib\\";
         System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver.exe");
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("https://kristinek.github.io/site/tasks/enter_a_number");
+     //   numberPage = PageFactory.initElements(driver, NumberSamplePage.class);
+       // numberSubmittedPage = PageFactory.initElements(driver, NumberSubmittedSamplePage.class);
     }
 
     @After
@@ -27,6 +37,7 @@ public class Task1 {
     public void errorOnText() {
 //        TODO
 //        enter a text instead of a number, check that correct error is seen
+
     }
 
     @Test
